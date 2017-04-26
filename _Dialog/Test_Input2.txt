@@ -1,0 +1,5 @@
+Player: I asked you a question…
+Character: Nothing Much. You know?
+Player: Wh-What?
+Character: Oh.. Nevermind. Goodbye.
+Player: Uhm..

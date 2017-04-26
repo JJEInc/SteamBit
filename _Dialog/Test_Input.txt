@@ -1,0 +1,5 @@
+Player: Hello there, What is going on?
+Character: Nothing Much. You know?
+Player: No? I do not know??
+Character: Oh.. Nevermind. Goodbye.
+Player: Bye?
