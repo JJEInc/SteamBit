@@ -1,5 +1,5 @@
-Player: Hello there, What is going on?
-Character: Nothing Much. You know?
-Player: No? I do not know??
-Character: Oh.. Nevermind. Goodbye.
-Player: Bye?
+{Player}: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit eleifend egestas.
+{Character}: Integer id ultricies libero, id aliquet nibh. Ut pellentesque magna vel quam auctor, non iaculis tortor hendrerit.
+{Player}: Nulla leo sem, commodo a diam id, sodales elementum tortor.
+{Character}: Donec interdum et nisl a viverra. Pellentesque quis vehicula orci, at fermentum dolor.
+{Player}: Pellentesque at mi sit amet neque porttitor blandit. Aliquam sit amet justo mollis lacus tincidunt sodales non et neque. 

@@ -11,6 +11,7 @@ public class DialogManager : MonoBehaviour {
 	public Text pressEToInteract;
 	// TODO Should we move this variable to characterManager or something??
 	public bool isCharFacingRight;
+	public bool isAbleToTalk;
 	#endregion
 
 	#region DialogVariables
@@ -73,7 +74,7 @@ public class DialogManager : MonoBehaviour {
 			}
 			else
 			{
-				timeToDisplay = 0.065f;
+				timeToDisplay = 0.055f;
 			}
 		}
 		// If we are not in the process of displaying and still talking, once we press a button, it will
@@ -88,16 +89,18 @@ public class DialogManager : MonoBehaviour {
 		// Once we are done displaying and talking, then we can press a button and it will close the dialog
 		else if(!inProcessOfDisplayingDialog && !isTalking)
 		{
-			if(Input.anyKeyDown)
+			if(Input.anyKeyDown && isAbleToTalk)
 			{
 				ExitDialog();
+				pressEToInteract.enabled = true;
 			}
 		}
 
 		// Press Esc if you are not talking to someone important to cancel dialog
-		if(Input.GetKeyDown(KeyCode.Escape) && !importantDialog)
+		if(Input.GetKeyDown(KeyCode.Escape) && !importantDialog && isAbleToTalk)
 		{
 			ExitDialog();
+			pressEToInteract.enabled = true;
 		}
 	}
 
@@ -117,15 +120,21 @@ public class DialogManager : MonoBehaviour {
 
 			dialogBox.SetActive(true);
 
-			if(otherChar.GetComponent<DialogHolder>() != null)
-			{
-				if(otherChar.GetComponent<DialogHolder>().dialogs != null)
-				{
-					var multipleDialogs = otherChar.GetComponent<DialogHolder>().dialogs;
-					var randNumGen = Random.Range(0, multipleDialogs.Count);
+			var otherCharDialog = otherChar.GetComponent<DialogHolder>();
 
-					dialog = multipleDialogs[randNumGen].text.Split('\n');
-					importantDialog = otherChar.GetComponent<DialogHolder>().isImportant;
+			if(otherCharDialog != null)
+			{
+				if(otherCharDialog.dialogs != null)
+				{
+					//var multipleDialogs = otherCharDialog.dialogs;
+					//var randNumGen = Random.Range(0, multipleDialogs.Count);
+
+
+					dialog = otherCharDialog.dialogs[otherCharDialog.currDialog].text.Split('\n');
+					importantDialog = otherCharDialog.isImportant;
+
+					// Instead of random text, we'll progress through their dialog texts
+					otherCharDialog.currDialog = (otherCharDialog.currDialog + 1) % otherCharDialog.dialogs.Count;
 				}
 				else
 				{
@@ -201,6 +210,8 @@ public class DialogManager : MonoBehaviour {
 		ResetDialogVariables();
 		currDialogPos = 0;
 		dialogText.text = "";
+
+		StopAllCoroutines();
 	}
 	#endregion
 
@@ -273,8 +284,21 @@ public class DialogManager : MonoBehaviour {
 			var charPos = col.gameObject.transform.FindChild("Head").transform.position;
 			otherCharCamera.transform.position = new Vector3(charPos.x, charPos.y, -1);
 			SwapPlayerImagePositions();
+
+			isAbleToTalk = true;
 		}
 
+	}
+
+	void OnTriggerStay2D(Collider2D col)
+	{
+		if(col.tag == "npc")
+		{
+			if(!isTalking)
+			{
+				pressEToInteract.enabled = true;
+			}
+		}
 	}
 
 	/// <summary>
@@ -289,6 +313,10 @@ public class DialogManager : MonoBehaviour {
 			otherChar = null;
 			// TODO Deactivate initiation
 			pressEToInteract.enabled = false;
+
+			ExitDialog();
+
+			isAbleToTalk = false;
 		}
 
 	}

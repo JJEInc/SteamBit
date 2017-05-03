@@ -1,5 +1,5 @@
-Player: I asked you a question…
-Character: Nothing Much. You know?
-Player: Wh-What?
-Character: Oh.. Nevermind. Goodbye.
-Player: Uhm..
+{Player}: Maecenas a ipsum in lacus gravida auctor.
+{Character}: Fusce volutpat ut nunc vel porttitor. Nunc porttitor tempus mauris ut volutpat.
+{Player}: Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+{Character}: Suspendisse placerat hendrerit pulvinar.
+{Player}: Cras venenatis mauris ac tortor laoreet laoreet.

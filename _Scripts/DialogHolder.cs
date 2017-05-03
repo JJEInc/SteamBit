@@ -9,4 +9,5 @@ public class DialogHolder : MonoBehaviour {
 	public List<TextAsset> dialogs;
 	// Change to important in inspector if this is important
 	public bool isImportant;
+	public int currDialog = 0;
 }
