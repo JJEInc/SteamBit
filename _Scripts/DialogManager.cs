@@ -18,19 +18,27 @@ public class DialogManager : MonoBehaviour {
 	public GameObject otherChar;
 	public GameObject dialogBox;
 	public static bool isTalking;
-	public bool inProcessOfDisplayingDialog;
+	public static bool inProcessOfDisplayingDialog;
 	public bool importantDialog;
 	public Camera otherCharCamera;
 	public Text dialogText;
 	public RawImage charImage;
 	public RawImage otherCharImage;
-	public string[] dialog;
-	public int currDialogPos = 0;
+	public static string[] dialog;
+	public static int currDialogPos = 0;
 	public string currDialogText;
 	public int currPosInString = 0;
-	public float timeToDisplay = 0.065f;
+	public static float timeToDisplay = 0.065f;
 	#endregion
 
+
+	public static Text[] characters;
+
+	void Awake()
+	{
+		characters = GameObject.Find("TextHolder").GetComponentsInChildren<Text>();
+		characters.ToList().ForEach(x => x.text = "");
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -138,17 +146,100 @@ public class DialogManager : MonoBehaviour {
 				}
 				else
 				{
+					// TODO REWORK
 					dialog = new string[1] { "Character: ..." };
 				}
 			}
 			else
 			{
+				// TODO REWORK
 				dialog = new string[1] { "Character: ..." };
 			}
 		}
 	}
 
 	/// <summary>
+	/// Creates the character list after initialzing everything back to null.
+	/// </summary>
+	/// <param name="dialog">Dialog.</param>
+	public static IEnumerator DisplayDialog(string dialogText)
+	{
+		inProcessOfDisplayingDialog = true;
+
+		characters.ToList().ForEach(x => x.text = "");
+
+		for(int i = 0; i < dialogText.Length; ++i)
+		{
+			characters[i].text = dialogText[i].ToString();
+			yield return new WaitForSeconds(timeToDisplay);
+		}
+
+		ResetDialogVariables();
+
+		if(currDialogPos < dialog.Length - 1)
+		{
+			++currDialogPos;
+		}
+		else
+		{
+			isTalking = false;
+		}
+	}
+
+	/// <summary>
+	/// Finds the string in list and returns the start and end index.
+	/// </summary>
+	/// <returns>The string in list.</returns>
+	/// <param name="chars">Chars.</param>
+	/// <param name="toFind">To find.</param>
+	public static int[] FindStringInList(List<string> chars, string toFind)
+	{
+		var start_end_indexes = new int[2] { -1, -1 };
+
+		for(int i = 0; i < chars.Count; ++i)
+		{
+			if(chars[i].Equals(toFind.Substring(0, 1)) && (i + (toFind.Length - 1)) < chars.Count)
+			{
+				bool isIncorrect = false;
+				// We've already checked that the first index is found
+				for(int j = 1; j < toFind.Length; ++j)
+				{
+					if(!chars[i + j].Equals(toFind.Substring(j, 1)))
+					{
+						isIncorrect = true;
+						break;
+					}
+				}
+
+				if(!isIncorrect)
+				{
+					start_end_indexes[0] = i;
+					start_end_indexes[1] = i + (toFind.Length - 1);
+					break;
+				}
+			}
+		}
+
+		return start_end_indexes;
+	}
+
+	/// <summary>
+	/// Moves the text wave.
+	/// </summary>
+	/// <param name="indexStartAffect">Index of list characters to start affect.</param>
+	/// <param name="indexEndAffect">Index of list characters to end affect.</param>
+	/// <param name="height">Height of the wave.</param>
+	public static void MoveText_Wave(int indexStartAffect, int indexEndAffect, float height)
+	{
+		
+	}
+
+	public static IEnumerator Wave(Text element, float height)
+	{
+		return null;
+	}
+
+	/*/// <summary>
 	/// Displays the dialog.
 	/// We display the dialog character by character waiting for specific amount of time. 
 	/// If we are still currently in our current dialog, then we will continue displaying its next character.
@@ -156,11 +247,13 @@ public class DialogManager : MonoBehaviour {
 	/// </summary>
 	/// <returns>The dialog.</returns>
 	/// <param name="nextDialog">Next dialog.</param>
-	public IEnumerator DisplayDialog(string nextDialog)
+	public void DisplayDialog(string nextDialog)
 	{
+		StartCoroutine(DisplayDio(nextDialog));
+				
 		inProcessOfDisplayingDialog = true;
 
-		if(currDialogText != nextDialog)
+		/*if(currDialogText != nextDialog)
 		{
 			currDialogText = nextDialog;
 			dialogText.text = "";
@@ -176,27 +269,27 @@ public class DialogManager : MonoBehaviour {
 		}
 		else
 		{
-			ResetDialogVariables();
+			//ResetDialogVariables();
 
-			if(currDialogPos < dialog.Length - 1)
-			{
-				++currDialogPos;
-			}
-			else
-			{
-				isTalking = false;
-			}
+		if(currDialogPos < dialog.Length - 1)
+		{
+			++currDialogPos;
 		}
-	}
+		else
+		{
+			isTalking = false;
+		}
+		//}
+	}*/
 
 	/// <summary>
 	/// Resets the dialog variables.
 	/// </summary>
-	public void ResetDialogVariables()
+	public static void ResetDialogVariables()
 	{
 		inProcessOfDisplayingDialog = false;
 		timeToDisplay = 0.065f;
-		currPosInString = 0;
+		//currPosInString = 0;
 	}
 
 	/// <summary>
@@ -209,7 +302,7 @@ public class DialogManager : MonoBehaviour {
 
 		ResetDialogVariables();
 		currDialogPos = 0;
-		dialogText.text = "";
+		//dialogText.text = "";
 
 		StopAllCoroutines();
 	}
