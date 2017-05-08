@@ -147,13 +147,13 @@ public class DialogManager : MonoBehaviour {
 				else
 				{
 					// TODO REWORK
-					dialog = new string[1] { "Character: ..." };
+					dialog = new string[1] { "{Character}: ..." };
 				}
 			}
 			else
 			{
 				// TODO REWORK
-				dialog = new string[1] { "Character: ..." };
+				dialog = new string[1] { "{Character}: ..." };
 			}
 		}
 	}
