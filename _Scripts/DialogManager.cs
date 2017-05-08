@@ -31,7 +31,6 @@ public class DialogManager : MonoBehaviour {
 	public static float timeToDisplay = 0.065f;
 	#endregion
 
-
 	public static Text[] characters;
 
 	void Awake()
@@ -229,58 +228,22 @@ public class DialogManager : MonoBehaviour {
 	/// <param name="indexStartAffect">Index of list characters to start affect.</param>
 	/// <param name="indexEndAffect">Index of list characters to end affect.</param>
 	/// <param name="height">Height of the wave.</param>
-	public static void MoveText_Wave(int indexStartAffect, int indexEndAffect, float height)
+	public static IEnumerator MoveText_Wave(/*int indexStartAffect, int indexEndAffect,*/ string stringToMove, float height)
 	{
-		
+		var indexes = FindStringInList(characters, stringToMove);
+
+		for(int i = indexes[0]; i <= indexes[1]; ++i)
+		{
+			Wave(characters[i], height);
+			yield return new WaitForSeconds(.5f);
+		}
 	}
 
-	public static IEnumerator Wave(Text element, float height)
+	public static void Wave(Text element, float height)
 	{
+		// TODO 
 		return null;
 	}
-
-	/*/// <summary>
-	/// Displays the dialog.
-	/// We display the dialog character by character waiting for specific amount of time. 
-	/// If we are still currently in our current dialog, then we will continue displaying its next character.
-	/// Otherwise, we reset the variables and test if we are done with the character full dialog or not
-	/// </summary>
-	/// <returns>The dialog.</returns>
-	/// <param name="nextDialog">Next dialog.</param>
-	public void DisplayDialog(string nextDialog)
-	{
-		StartCoroutine(DisplayDio(nextDialog));
-				
-		inProcessOfDisplayingDialog = true;
-
-		/*if(currDialogText != nextDialog)
-		{
-			currDialogText = nextDialog;
-			dialogText.text = "";
-		}
-
-		dialogText.text += nextDialog[currPosInString];
-
-		yield return new WaitForSeconds(timeToDisplay);
-		if(currPosInString < nextDialog.Length - 1)
-		{
-			++currPosInString;
-			StartCoroutine(DisplayDialog(nextDialog));
-		}
-		else
-		{
-			//ResetDialogVariables();
-
-		if(currDialogPos < dialog.Length - 1)
-		{
-			++currDialogPos;
-		}
-		else
-		{
-			isTalking = false;
-		}
-		//}
-	}*/
 
 	/// <summary>
 	/// Resets the dialog variables.

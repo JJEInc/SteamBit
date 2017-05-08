@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
 
-	#region Scene Variables
+	#region Text Variables
 	public Text NewGameText;
 	public Text NewGameText_Alt;
 	public Text LoadGameText;
@@ -15,6 +15,11 @@ public class MainMenu : MonoBehaviour {
 	public Text SettingsText_Alt;
 	public Text QuitGameText;
 	public Text QuitGameText_Alt;
+	#endregion
+
+	#region Transition Logic
+	public CanvasGroup MenuButtons;
+	public CanvasGroup StartGameOptions;
 	#endregion
 
 	// Use this for initialization
@@ -42,12 +47,19 @@ public class MainMenu : MonoBehaviour {
 		button.GetComponent<TextManipulation>().MoveText_Back();
 	}
 
-	public void NewGame()
+	public void StartGame()
 	{
-		// TODO 
+		// TODO
+		MenuButtons.alpha = 0;
+		MenuButtons.interactable = false;
+		MenuButtons.blocksRaycasts = false;
+
+		StartGameOptions.alpha = 1;
+		StartGameOptions.interactable = true;
+		StartGameOptions.blocksRaycasts = true;
 	}
 
-	public void LoadGame()
+	public void LoadGame(Button button)
 	{
 		// TODO
 	}
@@ -55,6 +67,17 @@ public class MainMenu : MonoBehaviour {
 	public void Settings()
 	{
 		// TODO
+	}
+
+	public void Back()
+	{
+		MenuButtons.alpha = 1;
+		MenuButtons.interactable = true;
+		MenuButtons.blocksRaycasts = true;
+
+		StartGameOptions.alpha = 0;
+		StartGameOptions.interactable = false;
+		StartGameOptions.blocksRaycasts = false;
 	}
 
 	public void QuitGame()
