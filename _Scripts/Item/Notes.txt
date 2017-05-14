@@ -1,0 +1,9 @@
+// Just a file for us to use to keep track of our thoughts, write down
+// big picture ideas for Items, write pseudo-code for what we want
+// classes and functions to do, etc.
+
+Item.cs:
+    Item attributes: name, value, weight
+    Clothing attributes: color (should we do this using hex values?)
+      // Not sure what else I can add to Clothing, any thoughts?
+    
