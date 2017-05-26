@@ -1,0 +1,15 @@
++ Mana bar/ Cooldown
++ Reality Shift - Switch to another reality
++ Teleport - 2 ways to interact with this: 1) manual, where you engage reality shift and move and then come back to reality, 2) automatic, where you simply place your mouse where you want to end up. Mana consumption based on how far you travel
++ Gaze - See into the other reality without going into reality shift; consumes less mana
+
++ Combat System - Watered Down Version of Crafting System
++ Status effects - Slow down, poison, come up with more unique ideas
++ Main “weapon” would be a conjuring item: 1 item of short, medium and long range.
++ Each item can be used and the more it is used the more abilities/ stats you get.
++ Crafting system would be attaching effects
++ Main “weapon” would be able to conjure secondary weapons at a summon cost - Need a summon bar then? Or use the Mana bar?
++ Short range - Gauntlets
++ Mid range - Axe
++ Long range - Flail
++ Secondary Weapons
