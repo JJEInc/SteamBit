@@ -2,7 +2,7 @@
 
 namespace Items {
 
-  class Item {
+  public class Item {
 
     public string name {get; set;}
     public double value {get; set;}
@@ -22,10 +22,16 @@ namespace Items {
         color = aColor;
     }
   }*/
-  class Potions : Item {
+  public class Potions : Item {
 
-    enum type {health, mana};
+    public enum PotionType {health, mana};
+
+    public PotionType potionType;
+
+    public Potions(string aName, double aVal, double aWei, PotionType type) : base(aName, aVal, aWei)
+    {
+    	potionType = type;
+    }
+
   }
-
-
 }

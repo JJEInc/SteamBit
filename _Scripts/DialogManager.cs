@@ -52,14 +52,11 @@ public class DialogManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.D) && !isCharFacingRight)
 		{
 			isCharFacingRight = true;
-			FlipUI();
 		}
-
 		// Triggers to flip character left if not already left
-		if(Input.GetKeyDown(KeyCode.A) && isCharFacingRight)
+		else if(Input.GetKeyDown(KeyCode.A) && isCharFacingRight)
 		{
 			isCharFacingRight = false;
-			FlipUI();
 		}
 
 		// Press E and be not talking to someone to initiate dialog
@@ -191,13 +188,13 @@ public class DialogManager : MonoBehaviour {
 	/// <returns>The string in list.</returns>
 	/// <param name="chars">Chars.</param>
 	/// <param name="toFind">To find.</param>
-	public static int[] FindStringInList(List<string> chars, string toFind)
+	public static int[] FindStringInList(Text[] chars, string toFind)
 	{
 		var start_end_indexes = new int[2] { -1, -1 };
 
-		for(int i = 0; i < chars.Count; ++i)
+		for(int i = 0; i < chars.Length; ++i)
 		{
-			if(chars[i].Equals(toFind.Substring(0, 1)) && (i + (toFind.Length - 1)) < chars.Count)
+			if(chars[i].Equals(toFind.Substring(0, 1)) && (i + (toFind.Length - 1)) < chars.Length)
 			{
 				bool isIncorrect = false;
 				// We've already checked that the first index is found
@@ -239,10 +236,10 @@ public class DialogManager : MonoBehaviour {
 		}
 	}
 
-	public static void Wave(Text element, float height)
+	public static IEnumerator Wave(Text element, float height)
 	{
 		// TODO 
-		return null;
+		yield return new WaitForSeconds(0.0f);
 	}
 
 	/// <summary>
@@ -273,22 +270,6 @@ public class DialogManager : MonoBehaviour {
 
 
 	#region UI Manipulation
-	//TODO Temporary Fix for the E button UI - Switch this to a characterManager
-
-	/// <summary>
-	/// Flips the UI based on which way the character is facing.
-	/// </summary>
-	public void FlipUI()
-	{
-		float t = 1;
-		if(!isCharFacingRight)
-		{
-			t = -1;
-		}
-
-		pressEToInteract.rectTransform.localScale = new Vector3(t, 1, 1);
-	}
-
 	/// <summary>
 	/// Swaps the player image positions.
 	/// </summary>
