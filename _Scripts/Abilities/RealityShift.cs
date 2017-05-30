@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RealityShift : MonoBehaviour {
+public class RealityShift {
 
 	public enum Realities {
 		steamPunk = 0,
-		victorian = 1,
+		darkair = 1,
 	};
 	public static Realities currentReality = Realities.steamPunk;
-	public Text CurrRealityText;
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	/// <summary>
 	/// Changes the reality.
@@ -23,21 +17,19 @@ public class RealityShift : MonoBehaviour {
 	///		This is just for testing purposes, we will integrate better when the time comes.
 	/// </summary>
 	/// <param name="reality">Reality.</param>
-	public void ChangeReality(int reality)
+	public void ChangeReality()
 	{
-		switch(reality)
+		// Switch to the opposite reality we are currently in
+		switch(currentReality)
 		{
-		case 0:
-			currentReality = Realities.steamPunk;
-			CurrRealityText.text = "SteamPunk : 0";
+		case Realities.steamPunk:
+			currentReality = Realities.darkair;
 			break;
-		case 1:
-			currentReality = Realities.victorian;
-			CurrRealityText.text = "Victorian : 1";
+		case Realities.darkair:
+			currentReality = Realities.steamPunk;
 			break;
 		default:
-			currentReality = Realities.steamPunk;
-			CurrRealityText.text = "SteamPunk : 0";
+			currentReality = Realities.darkair;
 			break;
 		}
 		// TODO Add animations, sound change, etc.
