@@ -6,6 +6,7 @@ public class FollowCharacter : MonoBehaviour {
 
 	public GameObject character;
 	public GameObject toFollow;
+	public float amountToFloat;
 
 	// Use this for initialization
 	void Start () 
@@ -16,6 +17,7 @@ public class FollowCharacter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		toFollow.transform.position = new Vector2(character.transform.position.x, character.transform.position.y + 2.0f);
+		toFollow.transform.position = new Vector2(character.transform.position.x, 
+												  character.transform.position.y + amountToFloat);
 	}
 }
