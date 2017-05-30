@@ -19,6 +19,7 @@ public class DialogManager : MonoBehaviour {
 	public GameObject dialogBox;
 	public static bool isTalking;
 	public static bool inProcessOfDisplayingDialog;
+	public bool skipDialog;
 	public bool importantDialog;
 	public Camera otherCharCamera;
 	public Text dialogText;
@@ -31,12 +32,13 @@ public class DialogManager : MonoBehaviour {
 	public static float timeToDisplay = 0.065f;
 	#endregion
 
-	public static Text[] characters;
+	//public static Text[] characters;
 
 	void Awake()
 	{
-		characters = GameObject.Find("TextHolder").GetComponentsInChildren<Text>();
-		characters.ToList().ForEach(x => x.text = "");
+		// TODO Make this modular
+		//characters = GameObject.Find("TextHolder").GetComponentsInChildren<Text>();
+		//characters.ToList().ForEach(x => x.text = "");
 	}
 
 	// Use this for initialization
@@ -72,9 +74,10 @@ public class DialogManager : MonoBehaviour {
 		// Otherwise, we revert back to our previous display speed
 		if(inProcessOfDisplayingDialog && isTalking)
 		{
-			if(Input.anyKey)
+			if(Input.anyKeyDown)
 			{
 				timeToDisplay = 0.0f;
+				skipDialog = true;
 			}
 			else
 			{
@@ -158,15 +161,25 @@ public class DialogManager : MonoBehaviour {
 	/// Creates the character list after initialzing everything back to null.
 	/// </summary>
 	/// <param name="dialog">Dialog.</param>
-	public static IEnumerator DisplayDialog(string dialogText)
+	public IEnumerator DisplayDialog(string dialogString)
 	{
 		inProcessOfDisplayingDialog = true;
 
-		characters.ToList().ForEach(x => x.text = "");
+		// TODO Readd this after we can figure it out
+		//characters.ToList().ForEach(x => x.text = "");
+		dialogText.text = "";
 
-		for(int i = 0; i < dialogText.Length; ++i)
+		for(int i = 0; i < dialogString.Length; ++i)
 		{
-			characters[i].text = dialogText[i].ToString();
+			// TODO Readd this after we can figure it out
+			//characters[i].text = dialogString[i].ToString();
+			if(skipDialog)
+			{
+				dialogText.text = dialogString;
+				break;
+			}
+
+			dialogText.text += dialogString[i];
 			yield return new WaitForSeconds(timeToDisplay);
 		}
 
@@ -225,7 +238,7 @@ public class DialogManager : MonoBehaviour {
 	/// <param name="indexStartAffect">Index of list characters to start affect.</param>
 	/// <param name="indexEndAffect">Index of list characters to end affect.</param>
 	/// <param name="height">Height of the wave.</param>
-	public static IEnumerator MoveText_Wave(/*int indexStartAffect, int indexEndAffect,*/ string stringToMove, float height)
+	/*public static IEnumerator MoveText_Wave(/*int indexStartAffect, int indexEndAffect\*, string stringToMove, float height)
 	{
 		var indexes = FindStringInList(characters, stringToMove);
 
@@ -234,7 +247,7 @@ public class DialogManager : MonoBehaviour {
 			Wave(characters[i], height);
 			yield return new WaitForSeconds(.5f);
 		}
-	}
+	}*/
 
 	public static IEnumerator Wave(Text element, float height)
 	{
@@ -245,11 +258,11 @@ public class DialogManager : MonoBehaviour {
 	/// <summary>
 	/// Resets the dialog variables.
 	/// </summary>
-	public static void ResetDialogVariables()
+	public void ResetDialogVariables()
 	{
 		inProcessOfDisplayingDialog = false;
 		timeToDisplay = 0.065f;
-		//currPosInString = 0;
+		skipDialog = false;
 	}
 
 	/// <summary>
@@ -262,7 +275,7 @@ public class DialogManager : MonoBehaviour {
 
 		ResetDialogVariables();
 		currDialogPos = 0;
-		//dialogText.text = "";
+		skipDialog = false;
 
 		StopAllCoroutines();
 	}
