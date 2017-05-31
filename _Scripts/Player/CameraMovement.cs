@@ -6,14 +6,15 @@ public class CameraMovement : MonoBehaviour {
 
 	public Transform cameraMove;
 	public GameObject toFollow;
-	public Vector3 toFollowOffset;
+	Vector3 toFollowOffset;
+	public float z;
 	
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
 		if(toFollowOffset.x != toFollow.transform.position.x)
 		{
-			toFollowOffset = new Vector3(toFollow.transform.position.x, toFollow.transform.position.y, -10);
+			toFollowOffset = new Vector3(toFollow.transform.position.x, toFollow.transform.position.y, z);
 		}
 
 		cameraMove.transform.position = Vector3.Lerp(cameraMove.transform.position, toFollowOffset, Time.deltaTime);

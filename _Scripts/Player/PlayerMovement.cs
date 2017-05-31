@@ -16,22 +16,22 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		if(Input.GetKey(KeyCode.A))
 		{
-			player.position = new Vector2(player.position.x - movement, player.position.y);
+			player.position = new Vector3(player.position.x - movement, player.position.y, player.position.z);
 		}
 
 		if(Input.GetKey(KeyCode.D))
 		{
-			player.position = new Vector2(player.position.x + movement, player.position.y);
+			player.position = new Vector3(player.position.x + movement, player.position.y, player.position.z);
 		}
 
 		if(Input.GetKey(KeyCode.W))
 		{
-			player.position = new Vector2(player.position.x, player.position.y + movement);
+			player.position = new Vector3(player.position.x, player.position.y + movement, player.position.z);
 		}
 
 		if(Input.GetKey(KeyCode.S))
 		{
-			player.position = new Vector2(player.position.x, player.position.y - movement);
+			player.position = new Vector3(player.position.x, player.position.y - movement, player.position.z);
 		}
 	}
 }

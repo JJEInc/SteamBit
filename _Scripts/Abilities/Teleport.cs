@@ -5,15 +5,24 @@ using System;
 
 public class Teleport {
 
-	public void InitiateTeleport()
+	public void ActivateTeleport(GameObject player)
 	{
-		AbilityManager.realityshift.ChangeReality();
+		ManaBar.manaSubBar.GetComponent<CanvasGroup>().alpha = 1;
+		ManaBar.manabar.GetComponent<CanvasGroup>().alpha = 0;
+
+		AbilityManager.realityshift.ChangeReality(player, 0.0f);
+
+		ManaBar.abilityInUse = true;
 	}
 
-	public void TerminateTeleport(float cost)
+	public void DeactivateTeleport(GameObject player, float cost)
 	{
-		AbilityManager.realityshift.ChangeReality();
+		ManaBar.manaSubBar.GetComponent<CanvasGroup>().alpha = 0;
+		ManaBar.manabar.GetComponent<CanvasGroup>().alpha = 1;
+
+		AbilityManager.realityshift.ChangeReality(player, 0.0f);
 
 		ManaBar.Deplete(cost);
+		ManaBar.abilityInUse = false;
 	}
 }

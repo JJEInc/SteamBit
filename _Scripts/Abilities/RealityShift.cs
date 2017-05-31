@@ -17,7 +17,7 @@ public class RealityShift {
 	///		This is just for testing purposes, we will integrate better when the time comes.
 	/// </summary>
 	/// <param name="reality">Reality.</param>
-	public void ChangeReality()
+	public void ChangeReality(GameObject objectToChangeRealities, float cost)
 	{
 		// Switch to the opposite reality we are currently in
 		switch(currentReality)
@@ -33,5 +33,27 @@ public class RealityShift {
 			break;
 		}
 		// TODO Add animations, sound change, etc.
+		CameraManager.SwitchCamera();
+
+		float z;
+
+		switch(RealityShift.currentReality)
+		{
+		case RealityShift.Realities.steamPunk:
+			z = -3;
+			break;
+		case RealityShift.Realities.darkair:
+			z = 17;
+			break;
+		default:
+			z = -3;
+			break;
+		}
+
+		var pos = objectToChangeRealities.transform.position;
+		objectToChangeRealities.transform.position = new Vector3(pos.x, pos.y, z);
+
+		ManaBar.Deplete(cost);
+
 	}
 }
