@@ -9,8 +9,9 @@ public class ManaBar : MonoBehaviour {
 	public static Slider manaSubBar;
 	public static bool abilityInUse;
 	public static float cooldown = 2.5f;
-	static float elapsedTime = cooldown;
 	public static bool blinking;
+	static float elapsedTime = cooldown;
+	static float recoverAmount = 0.25f;
 
 	void Awake()
 	{
@@ -23,11 +24,13 @@ public class ManaBar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		// If our elapsed time is less than our cooldown and the ability is not in use then increase our elapsed time
 		if(elapsedTime < cooldown && !abilityInUse)
 		{
 			elapsedTime += Time.deltaTime;
 		}
 
+		// If we are not at our max value then if we are not using an ability and our elapsed time is high enough, then we recover
 		if(manabar.value != manabar.maxValue)
 		{
 			if(elapsedTime >= cooldown && !abilityInUse)
@@ -36,6 +39,8 @@ public class ManaBar : MonoBehaviour {
 			}
 		}
 
+		// If our manabar is less than zero and we aren't blinking and we are using our ability then we blink
+		// else if we are not blinking or our ability is not in use, then we stop blinking
 		if(manaSubBar.value <= 0.0f && !blinking && abilityInUse)
 		{
 			StartCoroutine(Blink(manaSubBar));
@@ -47,6 +52,10 @@ public class ManaBar : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Deplete the manabar the specified amount and reset our elapsed time.
+	/// </summary>
+	/// <param name="value">Value.</param>
 	public static bool Deplete(float value)
 	{
 		if(value <= manabar.value)
@@ -61,16 +70,27 @@ public class ManaBar : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Raise the manabar the specified amount.
+	/// </summary>
+	/// <param name="value">Value.</param>
 	public void Raise(float value)
 	{
 		manabar.value += value;
 	}
 
+	/// <summary>
+	/// Recover at a steady rate the recover amount.
+	/// </summary>
 	public void Recover()
 	{
-		manabar.value += 0.25f;
+		manabar.value += recoverAmount;
 	}
 
+	/// <summary>
+	/// Blink the specified slider on and off.
+	/// </summary>
+	/// <param name="slider">Slider.</param>
 	public IEnumerator Blink(Slider slider)
 	{
 		blinking = true;

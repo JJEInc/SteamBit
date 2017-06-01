@@ -5,10 +5,11 @@ using System;
 
 public class CameraManager : MonoBehaviour {
 
-	public static Camera steampunk;
-	public static Camera darkair;
-
+	#region vars
+	static Camera steampunk;
+	static Camera darkair;
 	public static Camera currCamera;
+	#endregion
 
 	void Awake()
 	{
@@ -18,6 +19,9 @@ public class CameraManager : MonoBehaviour {
 		currCamera = steampunk;
 	}
 
+	/// <summary>
+	/// Switchs the current camera.
+	/// </summary>
 	public static void SwitchCamera()
 	{
 		switch(currCamera.name)

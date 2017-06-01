@@ -4,18 +4,47 @@ using UnityEngine;
 
 public class Gaze {
 
-	public void ActivateGaze(GameObject currGaze)
+	#region vars
+	public bool gazing;
+	public bool ableToGaze = true;
+	public GameObject gaze_steampunk;
+	public GameObject gaze_darkair;
+	public GameObject currGaze;
+	#endregion
+
+	/// <summary>
+	/// Initiates the Gaze ability.
+	/// </summary>
+	public void GazeAbility()
 	{
-		currGaze.SetActive(true);
+		// Switches the current gaze based on the current reality
+		switch(RealityShift.currentReality)
+		{
+		case RealityShift.Realities.steamPunk:
+			currGaze = gaze_steampunk;
+			break;
+		case RealityShift.Realities.darkair:
+			currGaze = gaze_darkair;
+			break;
+		default:
+			currGaze = gaze_steampunk;
+			break;
+		}
 
-		ManaBar.abilityInUse = true;
+		// Sets the gaze visible or not
+		if(ableToGaze && !gazing)
+		{
+			currGaze.SetActive(true);
+
+			ManaBar.abilityInUse = true;
+			gazing = true;
+		}
+		else if(gazing)
+		{
+			currGaze.SetActive(false);
+
+			ManaBar.abilityInUse = false;
+			gazing = false;
+		}
 	}
-
-	public void DeactivateGaze(GameObject currGaze)
-	{
-		currGaze.SetActive(false);
-
-		ManaBar.abilityInUse = false;
-	}
-
 }

@@ -11,163 +11,77 @@ public class AbilityManager : MonoBehaviour
 	public GameObject player;
 
 	#region teleport vars
+	Vector2 finalWorldPos;
 	Vector2 start;
 	float finalCost;
-	//public Transform playerTrans;
-	public bool teleporting;
-	public bool ableToTeleport;
-	public GameObject teleportCursor;
-	public Color activeColor;
-	public Color notActiveColor;
-	Vector2 finalWorldPos;
 	#endregion
 
 	#region realityshift vars
-	public bool shifting;
-	public bool ableToShift = true;
-	public float realityShiftCost = 25.0f;
+	float realityShiftCost = 25.0f;
 	#endregion
 
 	#region gaze vars
-	public bool gazing;
-	public bool ableToGaze = true;
-	public GameObject gaze_steampunk;
-	public GameObject gaze_darkair;
 	GameObject currGaze;
 	#endregion
+
+	void Awake()
+	{
+		gaze.gaze_steampunk = GameObject.Find("Gaze_OfDarkair");
+		gaze.gaze_darkair = GameObject.Find("Gaze_OfSteamPunk");
+
+		gaze.gaze_steampunk.SetActive(false);
+		gaze.gaze_darkair.SetActive(false);
+
+		teleport.teleportCursor = GameObject.Find("TeleportCursor");
+
+		teleport.teleportCursor.SetActive(false);
+	}
 
 	void Update()
 	{
 		#region (manual) teleport functionality
 		// F == Teleport
-		if(Input.GetKeyDown(KeyCode.F) && !shifting && !gazing)
+		if(Input.GetKeyDown(KeyCode.F) && !gaze.gazing)
 		{
-			if(!teleporting)
-			{
-				start = player.transform.position;
-				teleport.ActivateTeleport(player);
-				teleporting = true;
-			}
-			else if(teleporting && ableToTeleport)
-			{
-				teleport.DeactivateTeleport(player, finalCost);
-				teleporting = false;			
-			}
+			teleport.TeleportAbility(ref start, player, ref finalCost);
 		}
 		#endregion
 
 		#region (auto) teleport functionality
 		// RightClick == Teleport
-		if(Input.GetMouseButtonDown(1) && !shifting && !gazing)
+		if(Input.GetMouseButtonDown(1) && !gaze.gazing)
 		{
-			if(!teleporting)
-			{
-				start = player.transform.position;
-				teleport.AutoActivateTeleport();
-				teleporting = true;
-
-				teleportCursor.SetActive(true);
-			}
+			teleport.TeleportAbility(ref start, player, ref finalCost, true);
 		}
-		else if(Input.GetMouseButtonUp(1) && !shifting && !gazing)
+		else if(Input.GetMouseButtonUp(1) && !gaze.gazing)
 		{
-			if(teleporting)
-			{
-				teleport.AutoDeactivateTeleport(finalCost);
-				teleporting = false;
-
-				teleportCursor.SetActive(false);
-
-				if(ableToTeleport)
-				{
-					player.transform.position = finalWorldPos;
-				}
-			}
+			teleport.TeleportAbility(ref start, player, ref finalCost, true, finalWorldPos);
 		}
 		#endregion
 
 		#region teleport functions
-		if(teleporting)
+		if(teleport.teleporting)
 		{
-			if(teleportCursor.activeSelf)
-			{
-				var mousePosition = Input.mousePosition;
-				teleportCursor.transform.position = mousePosition;
-				finalWorldPos = CameraManager.currCamera.ScreenToWorldPoint(mousePosition);
-
-				finalCost = Vector2.Distance(start, finalWorldPos);
-			}
-			else
-			{
-				finalCost = Vector2.Distance(start, player.transform.position);
-			}
-
-			finalCost *= 5;
-
-			ManaBar.manaSubBar.value = ManaBar.manabar.value - finalCost;
-
-			if((ManaBar.manabar.value - finalCost) >= 0.0f)
-			{
-				ableToTeleport = true;
-
-				if(teleportCursor.activeSelf && !(teleportCursor.GetComponent<RawImage>().color == activeColor))
-				{
-					teleportCursor.GetComponent<RawImage>().color = activeColor;
-				}
-			}
-			else
-			{
-				ableToTeleport = false;
-
-				if(teleportCursor.activeSelf && !(teleportCursor.GetComponent<RawImage>().color == notActiveColor))
-				{
-					teleportCursor.GetComponent<RawImage>().color = notActiveColor;
-				}
-			}
+			teleport.TeleportLogic(start, player, teleport.teleportCursor, ref finalWorldPos, ref finalCost);
 		}
 		#endregion
 
 		#region realityshift functionality
 		// R == RealityShift
-		if(Input.GetKeyDown(KeyCode.R) && !teleporting && !gazing)
+		if(Input.GetKeyDown(KeyCode.R) && !teleport.teleporting && !gaze.gazing)
 		{
-			if(ableToShift)
-			{
-				realityshift.ChangeReality(player, realityShiftCost);
-			}
+			realityshift.ChangeReality(player, realityShiftCost);
 		}
 		#endregion
 
 		#region gaze functionality
 		// C == Gaze
-		if(Input.GetKeyDown(KeyCode.C) && !teleporting && !shifting)
+		if(Input.GetKeyDown(KeyCode.C) && !teleport.teleporting)
 		{
-			switch(RealityShift.currentReality)
-			{
-			case RealityShift.Realities.steamPunk:
-				currGaze = gaze_steampunk;
-				break;
-			case RealityShift.Realities.darkair:
-				currGaze = gaze_darkair;
-				break;
-			default:
-				currGaze = gaze_steampunk;
-				break;
-			}
-
-			if(ableToGaze && !gazing)
-			{
-				gaze.ActivateGaze(currGaze);
-				gazing = true;
-			}
-			else if(gazing)
-			{
-				gaze.DeactivateGaze(currGaze);
-				gazing = false;
-			}
+			gaze.GazeAbility();
 		}
 
-		if(gazing)
+		if(gaze.gazing)
 		{
 			ManaBar.Deplete(0.025f);
 		}
