@@ -8,30 +8,32 @@ public class CameraManager : MonoBehaviour {
 	public static Camera steampunk;
 	public static Camera darkair;
 
-	static string currCamera = "SteamPunkCamera";
+	public static Camera currCamera;
 
 	void Awake()
 	{
 		steampunk = GameObject.FindGameObjectWithTag("steampunkCamera").GetComponent<Camera>();
 		darkair = GameObject.FindGameObjectWithTag("darkairCamera").GetComponent<Camera>();
+
+		currCamera = steampunk;
 	}
 
 	public static void SwitchCamera()
 	{
-		switch(currCamera)
+		switch(currCamera.name)
 		{
 		case "SteamPunkCamera":
-			currCamera = darkair.name;
+			currCamera = darkair;
 			steampunk.enabled = false;
 			darkair.enabled = true;
 			break;
 		case "DarkairCamera":
-			currCamera = steampunk.name;
+			currCamera = steampunk;
 			steampunk.enabled = true;
 			darkair.enabled = false;
 			break;
 		default:
-			currCamera = steampunk.name;
+			currCamera = steampunk;
 			steampunk.enabled = true;
 			darkair.enabled = false;
 			break;

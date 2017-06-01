@@ -25,4 +25,21 @@ public class Teleport {
 		ManaBar.Deplete(cost);
 		ManaBar.abilityInUse = false;
 	}
+
+	public void AutoActivateTeleport()
+	{
+		ManaBar.abilityInUse = true;
+
+		ManaBar.manaSubBar.GetComponent<CanvasGroup>().alpha = 1;
+		ManaBar.manabar.GetComponent<CanvasGroup>().alpha = 0;
+	}
+
+	public void AutoDeactivateTeleport(float cost)
+	{
+		ManaBar.manaSubBar.GetComponent<CanvasGroup>().alpha = 0;
+		ManaBar.manabar.GetComponent<CanvasGroup>().alpha = 1;
+
+		ManaBar.Deplete(cost);
+		ManaBar.abilityInUse = false;
+	}
 }

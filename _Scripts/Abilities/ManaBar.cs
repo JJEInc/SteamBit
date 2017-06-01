@@ -10,7 +10,7 @@ public class ManaBar : MonoBehaviour {
 	public static bool abilityInUse;
 	public static float cooldown = 2.5f;
 	static float elapsedTime = cooldown;
-	static bool blinking;
+	public static bool blinking;
 
 	void Awake()
 	{
@@ -36,14 +36,14 @@ public class ManaBar : MonoBehaviour {
 			}
 		}
 
-		if(manaSubBar.value <= 0.0f && !blinking)
+		if(manaSubBar.value <= 0.0f && !blinking && abilityInUse)
 		{
 			StartCoroutine(Blink(manaSubBar));
 		}
-		else if(!blinking)
+		else if(!blinking || !abilityInUse)
 		{
-			StopAllCoroutines();
 			blinking = false;
+			StopAllCoroutines();
 		}
 	}
 

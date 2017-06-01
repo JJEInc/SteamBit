@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AbilityManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class AbilityManager : MonoBehaviour
 	//public Transform playerTrans;
 	public bool teleporting;
 	public bool ableToTeleport;
+	public GameObject teleportCursor;
+	public Color activeColor;
+	public Color notActiveColor;
+	Vector2 finalWorldPos;
 	#endregion
 
 	#region realityshift vars
@@ -33,7 +38,7 @@ public class AbilityManager : MonoBehaviour
 
 	void Update()
 	{
-		#region teleport functionality
+		#region (manual) teleport functionality
 		// F == Teleport
 		if(Input.GetKeyDown(KeyCode.F) && !shifting && !gazing)
 		{
@@ -49,10 +54,53 @@ public class AbilityManager : MonoBehaviour
 				teleporting = false;			
 			}
 		}
+		#endregion
 
+		#region (auto) teleport functionality
+		// RightClick == Teleport
+		if(Input.GetMouseButtonDown(1) && !shifting && !gazing)
+		{
+			if(!teleporting)
+			{
+				start = player.transform.position;
+				teleport.AutoActivateTeleport();
+				teleporting = true;
+
+				teleportCursor.SetActive(true);
+			}
+		}
+		else if(Input.GetMouseButtonUp(1) && !shifting && !gazing)
+		{
+			if(teleporting)
+			{
+				teleport.AutoDeactivateTeleport(finalCost);
+				teleporting = false;
+
+				teleportCursor.SetActive(false);
+
+				if(ableToTeleport)
+				{
+					player.transform.position = finalWorldPos;
+				}
+			}
+		}
+		#endregion
+
+		#region teleport functions
 		if(teleporting)
 		{
-			finalCost = Vector2.Distance(start, player.transform.position);
+			if(teleportCursor.activeSelf)
+			{
+				var mousePosition = Input.mousePosition;
+				teleportCursor.transform.position = mousePosition;
+				finalWorldPos = CameraManager.currCamera.ScreenToWorldPoint(mousePosition);
+
+				finalCost = Vector2.Distance(start, finalWorldPos);
+			}
+			else
+			{
+				finalCost = Vector2.Distance(start, player.transform.position);
+			}
 
 			finalCost *= 5;
 
@@ -61,10 +109,20 @@ public class AbilityManager : MonoBehaviour
 			if((ManaBar.manabar.value - finalCost) >= 0.0f)
 			{
 				ableToTeleport = true;
+
+				if(teleportCursor.activeSelf && !(teleportCursor.GetComponent<RawImage>().color == activeColor))
+				{
+					teleportCursor.GetComponent<RawImage>().color = activeColor;
+				}
 			}
 			else
 			{
 				ableToTeleport = false;
+
+				if(teleportCursor.activeSelf && !(teleportCursor.GetComponent<RawImage>().color == notActiveColor))
+				{
+					teleportCursor.GetComponent<RawImage>().color = notActiveColor;
+				}
 			}
 		}
 		#endregion
